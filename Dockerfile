@@ -1,13 +1,14 @@
-# Using Oracle GraalVM for JDK 17
+FROM container-registry.oracle.com/graalvm/native-image:21-ol8 AS builder
+
+# Install Maven
+RUN microdnf install maven
+
+WORKDIR /build
+COPY . /build
+RUN mvn package
+
 FROM container-registry.oracle.com/graalvm/jdk:21-ol8
-
-# JAR file will be specified by passing in a build time argument to docker build
-ARG APP_FILE=benchmark-jibber-0.0.1-SNAPSHOT.jar
-
+WORKDIR /app
+COPY --from=builder /build/target/benchmark-jibber-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# opy the JAR file into the root and rename
-COPY ./target/${APP_FILE} app.jar
-
-# Run java with the jar file when the container starts up
 CMD ["java","-jar","app.jar"]
