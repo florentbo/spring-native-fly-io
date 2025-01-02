@@ -1,10 +1,16 @@
-# fly.toml app configuration file generated for native-jibber on 2025-01-02T15:29:45+01:00
+# fly.toml app configuration file generated for spring-boot-microservice-jibber on 2025-01-02T19:30:05+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'native-jibber'
-primary_region = 'ams'
+app = 'spring-boot-microservice-jibber'
+primary_region = 'arn'
+
+[build]
+
+[[mounts]]
+  source = 'tmp'
+  destination = '/tmp'
 
 [http_service]
   internal_port = 8080
@@ -15,4 +21,6 @@ primary_region = 'ams'
   processes = ['app']
 
 [[vm]]
-  size = 'shared-cpu-1x'
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
