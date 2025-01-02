@@ -1,20 +1,13 @@
 # Using Oracle GraalVM for JDK 17
-FROM container-registry.oracle.com/graalvm/native-image:21-ol8 AS builder
+FROM container-registry.oracle.com/graalvm/jdk:21-ol8
 
-# Set the working directory to /home/app
-WORKDIR /build
-
-# Copy the source code into the image for building
-COPY . /build
-
-# Build
-RUN ./mvnw --no-transfer-progress native:compile -Pnative
-
-# The deployment Image
-FROM container-registry.oracle.com/os/oraclelinux:8-slim
+# JAR file will be specified by passing in a build time argument to docker build
+ARG APP_FILE
 
 EXPOSE 8080
 
-# Copy the native executable into the containers
-COPY --from=builder /build/target/benchmark-jibber app
-ENTRYPOINT ["/app"]
+# opy the JAR file into the root and rename
+COPY ./target/${APP_FILE} app.jar
+
+# Run java with the jar file when the container starts up
+CMD ["java","-jar","app.jar"]
