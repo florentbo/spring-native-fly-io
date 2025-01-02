@@ -2,7 +2,7 @@
 FROM container-registry.oracle.com/graalvm/jdk:21-ol8
 
 # JAR file will be specified by passing in a build time argument to docker build
-ARG APP_FILE
+ARG APP_FILE=benchmark-jibber-0.0.1-SNAPSHOT.jar
 
 EXPOSE 8080
 
