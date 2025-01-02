@@ -1,4 +1,13 @@
+# Using Oracle GraalVM for JDK 17
 FROM container-registry.oracle.com/graalvm/jdk:21-ol8
-VOLUME /tmp
-COPY target/benchmark-jibber-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+
+# JAR file will be specified by passing in a build time argument to docker build
+ARG APP_FILE=benchmark-jibber-0.0.1-SNAPSHOT.jar
+
+EXPOSE 8080
+
+# opy the JAR file into the root and rename
+COPY ./target/${APP_FILE} app.jar
+
+# Run java with the jar file when the container starts up
+CMD ["java","-jar","app.jar"]
